@@ -19,8 +19,7 @@ public class Board {
             System.out.println(playerMove.toString());
             board = board.makeMove(playerMove);
             board.display();
-            if (board.gameOver()){
-                System.out.println("White wins");
+            if (isGameOver(board)){
                 break;
             }
 
@@ -31,12 +30,25 @@ public class Board {
             System.out.println(playerMove.toString());
             board = board.makeMove(playerMove);
             board.display();
-            if (board.gameOver()){
-                System.out.println("Black wins");
+            if (isGameOver(board)){
                 break;
             }
 
             System.out.println("______________\n");
         }
 	}
+
+    private static boolean isGameOver(BoardState board){
+        if (board.gameOver()){
+            if (board.getWinner() == Player.Color.White)
+                System.out.println("White wins");
+            else if (board.getWinner() == Player.Color.Black)
+                System.out.println("Black wins");
+            else if (board.getWinner() == null)
+                System.out.println("Is tie");
+            return true;
+        }
+
+        return false;
+    }
 }

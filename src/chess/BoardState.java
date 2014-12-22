@@ -11,8 +11,10 @@ public class BoardState {
 
 	private Square[][] board;
 	private int moveCount;
+	private int whiteMovesLeft = 50;
+	private int blackMovesLeft = 50;
 	private boolean verbose = false, showingPositions = false;
-	private Color winner;
+	private Color winner = null; // will stay null in event of a tie
 
 	// The current player making the move
 	// The first player is white
@@ -172,57 +174,65 @@ public class BoardState {
 						if (s.getY()-2 >= 0){
 							if (s.getX()-1 >= 0){
 								Piece p2 = getSquare(x-1,y-2).getPiece();
-								if (p2 != null)
-									if (p2.getColor() != playerColor)
-										availableMoves.add(new Move(s, getSquare(s.getX()-1, s.getY()-2)));
+								if (p2 == null)
+									availableMoves.add(new Move(s, getSquare(s.getX()-1, s.getY()-2)));
+								else if (p2.getColor() != playerColor)
+									availableMoves.add(new Move(s, getSquare(s.getX()-1, s.getY()-2)));
 							}
 							if (s.getX()+1 < 8){
 								Piece p2 = getSquare(x+1,y-2).getPiece();
-								if (p2 != null)
-									if (p2.getColor() != playerColor)
-										availableMoves.add(new Move(s, getSquare(s.getX()+1, s.getY()-2)));
+								if (p2 == null)
+									availableMoves.add(new Move(s, getSquare(s.getX()+1, s.getY()-2)));
+								else if (p2.getColor() != playerColor)
+									availableMoves.add(new Move(s, getSquare(s.getX()+1, s.getY()-2)));
 							}
 						}
 						if (s.getY()+2 < 8){
 							if (s.getX()-1 >= 0){
 								Piece p2 = getSquare(x-1,y+2).getPiece();
-								if (p2 != null)
-									if (p2.getColor() != playerColor)
-										availableMoves.add(new Move(s, getSquare(s.getX()-1, s.getY()+2)));
+								if (p2 == null)
+									availableMoves.add(new Move(s, getSquare(s.getX()-1, s.getY()+2)));
+								else if (p2.getColor() != playerColor)
+									availableMoves.add(new Move(s, getSquare(s.getX()-1, s.getY()+2)));
 							}
 							if (s.getX()+1 < 8){
 								Piece p2 = getSquare(x+1,y+2).getPiece();
-								if (p2 != null)
-									if (p2.getColor() != playerColor)
-										availableMoves.add(new Move(s, getSquare(s.getX()+1, s.getY()+2)));
+								if (p2 == null)
+									availableMoves.add(new Move(s, getSquare(s.getX()+1, s.getY()+2)));
+								else if (p2.getColor() != playerColor)
+									availableMoves.add(new Move(s, getSquare(s.getX()+1, s.getY()+2)));
 							}
 						}
 						if (s.getX()-2 >= 0){
 							if (s.getY()-1 >= 0){
 								Piece p2 = getSquare(x-2,y-1).getPiece();
-								if (p2 != null)
-									if (p2.getColor() != playerColor)
-										availableMoves.add(new Move(s, getSquare(s.getX()-2, s.getY()-1)));
+								if (p2 == null)
+									availableMoves.add(new Move(s, getSquare(s.getX()-2, s.getY()-1)));
+								else if (p2.getColor() != playerColor)
+									availableMoves.add(new Move(s, getSquare(s.getX()-2, s.getY()-1)));
 							}
 							if (s.getY()+1 < 8){
 								Piece p2 = getSquare(x-2,y+1).getPiece();
-								if (p2 != null)
-									if (p2.getColor() != playerColor)
-										availableMoves.add(new Move(s, getSquare(s.getX()-2, s.getY()+1)));
+								if (p2 == null)
+									availableMoves.add(new Move(s, getSquare(s.getX()-2, s.getY()+1)));
+								else if (p2.getColor() != playerColor)
+									availableMoves.add(new Move(s, getSquare(s.getX()-2, s.getY()+1)));
 							}
 						}
 						if (s.getX()+2 < 8){
 							if (s.getY()-1 >= 0){
 								Piece p2 = getSquare(x+2,y-1).getPiece();
-								if (p2 != null)
-									if (p2.getColor() != playerColor)
-										availableMoves.add(new Move(s, getSquare(s.getX()+2, s.getY()-1)));
+								if (p2 == null)
+									availableMoves.add(new Move(s, getSquare(s.getX()+2, s.getY()-1)));
+								else if (p2.getColor() != playerColor)
+									availableMoves.add(new Move(s, getSquare(s.getX()+2, s.getY()-1)));
 							}
 							if (s.getY()+1 < 8){
 								Piece p2 = getSquare(x+2,y+1).getPiece();
-								if (p2 != null)
-									if (p2.getColor() != playerColor)
-										availableMoves.add(new Move(s, getSquare(s.getX()+2, s.getY()+1)));
+								if (p2 == null)
+									availableMoves.add(new Move(s, getSquare(s.getX()+2, s.getY()+1)));
+								else if (p2.getColor() != playerColor)
+									availableMoves.add(new Move(s, getSquare(s.getX()+2, s.getY()+1)));
 							}
 						}
 					}
@@ -233,21 +243,26 @@ public class BoardState {
 						for (int y2 = Math.max(0,y-1); y2 < Math.min(8,y+2); y2++){
 							for (int x2 = Math.max(0,x-1); x2 < Math.min(8,x+2); x2++){
 								if (!(x2 == x && y2 == y)){
-									Piece p2 = getSquare(x2,y2).getPiece();
-									if (p2 == null){
-										Move m = new Move(s, getSquare(x2,y2));
-										BoardState clonedState = this.makeMoveCloning(m);
-										if (!clonedState.playerIsInCheck(playerColor)){
-											availableMoves.add(m);
+
+									if (!opponentKingIsInAdjascentSquareTo(getSquare(x2,y2), playerColor)){
+										// Test if king will be in check from a move
+										Piece p2 = getSquare(x2,y2).getPiece();
+										if (p2 == null){
+											Move m = new Move(s, getSquare(x2,y2));
+											BoardState clonedState = this.makeMoveCloning(m);
+											if (!clonedState.playerIsInCheck(playerColor)){
+												availableMoves.add(m);
+											}
+										}
+										else if (p2.getColor() != playerColor){
+											Move m = new Move(s, getSquare(x2,y2));
+											BoardState clonedState = this.makeMoveCloning(m);
+											if (!clonedState.playerIsInCheck(playerColor)){
+												availableMoves.add(m);
+											}
 										}
 									}
-									else if (p2.getColor() != playerColor){
-										Move m = new Move(s, getSquare(x2,y2));
-										BoardState clonedState = this.makeMoveCloning(m);
-										if (!clonedState.playerIsInCheck(playerColor)){
-											availableMoves.add(m);
-										}
-									}
+
 								}
 							}
 						}
@@ -269,6 +284,22 @@ public class BoardState {
 		}
 
 		return availableMoves;
+	}
+
+	private boolean opponentKingIsInAdjascentSquareTo(Square mySquare, Color myColor){
+		for (int y = Math.max(0,mySquare.getY()-1); y < Math.min(8,mySquare.getY()+2); y++){
+			for (int x = Math.max(0,mySquare.getX()-1); x < Math.min(8,mySquare.getX()+2); x++){
+				if (x == mySquare.getX() && y == mySquare.getY())
+					continue;
+				Piece p = getSquare(x,y).getPiece();
+				if (p != null){
+					if (p.getType() == Type.King && p.getColor() != myColor){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	// Utility for getAllMoves() method but only for those available
@@ -497,7 +528,6 @@ public class BoardState {
 		int destSquareX = move.getDestSquare().getX();
 		int destSquareY = move.getDestSquare().getY();
 		Move moveOnClonedBoard = new Move(clone.getSquare(initSquareX, initSquareY), clone.getSquare(destSquareX, destSquareY));
-		//clone = clone.makeMove(move.fastCopy());
 		clone = clone.makeMove(moveOnClonedBoard);
 		return clone;
 	}
@@ -784,23 +814,40 @@ public class BoardState {
 		return false;
 	}
 
+	public Color getWinner(){
+		return winner;
+	}
+
 	// Game over if a player has zero available moves that will get them out of check
 	public boolean gameOver(){
 
+		ArrayList<Move> availableWhiteMoves = this.getAllMoves(Color.White);
+		ArrayList<Move> availableBlackMoves = this.getAllMoves(Color.Black);
+
 		if (!kingIsInPlay(Color.White) || !kingIsInPlay(Color.Black)){
 			System.out.println("King is mossing from one player. Something is wrong.");
-			System.exit(1);
+			return true;
 		}
 
-		if (this.playerIsInCheck(Color.White)){
-			ArrayList<Move> availableMoves = this.getAllMoves(Color.White);
-			if (availableMoves.size() == 0)
-				return true;
+		if (getPiecesCountForPlayer(Color.White) <= 1){
+			whiteMovesLeft--;
+			if (whiteMovesLeft <= 0)
+				return true; // tie
 		}
-		if (this.playerIsInCheck(Color.Black)){
-			ArrayList<Move> availableMoves = this.getAllMoves(Color.Black);
-			if (availableMoves.size() == 0)
-				return true;
+		if (getPiecesCountForPlayer(Color.Black) <= 1){
+			blackMovesLeft--;
+			if (blackMovesLeft <= 0)
+				return true; // tie
+		}
+
+		if (availableWhiteMoves.size() == 0){
+			winner = Color.Black;
+			return true;
+		}
+
+		if (availableBlackMoves.size() == 0){
+			winner = Color.White;
+			return true;
 		}
 
 		return false;
