@@ -5,7 +5,6 @@ public abstract class Player {
 		White, Black
 	}
 	private Color color;
-	// 0 for white, 1 for black
 	public Player(Color color){
 		this.color = color;
 	}

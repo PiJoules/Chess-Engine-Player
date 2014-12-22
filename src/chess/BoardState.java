@@ -13,6 +13,7 @@ public class BoardState {
 	private int moveCount;
 	private int whiteMovesLeft = 50;
 	private int blackMovesLeft = 50;
+	private Move lastMove; // record the last move made for display
 	private boolean verbose = false, showingPositions = false;
 	private Color winner = null; // will stay null in event of a tie
 
@@ -452,6 +453,7 @@ public class BoardState {
 	// A move will be when one piece is removed from one another square
 	// and copied onto another
 	public BoardState makeMove(Move move){
+		lastMove = move;
 		moveCount++;
 
 		Piece movingPiece = move.getMovingPiece();
@@ -480,12 +482,21 @@ public class BoardState {
 
 	//Display the board
 	public void display(){
+		// Mark the previous square of the moving
+		// piece with an x
+		int lastX = lastMove.getInitSquare().getX();
+		int lastY = lastMove.getInitSquare().getY();
+		char lastPosChar = 'X'; // for last move of white
+		if (lastMove.getDestSquare().getPiece().getColor() == Color.Black) // the piece is now on the destSquare instead of the init square
+			lastPosChar = 'x';
+
 		if (showingPositions){
 			System.out.print("   ");
 			for (int i = 0; i < 8; i++)
 				System.out.print(i + " ");
 			System.out.println("\n");
 		}
+
 		for(int y = 0; y < 8; y ++){
 			if (showingPositions){
 				System.out.print(y + "  ");
@@ -494,6 +505,8 @@ public class BoardState {
 				Piece p = board[y][x].getPiece();
 				if (p != null)
 					System.out.print(p.getCharacter());
+				else if (x == lastX && y == lastY)
+					System.out.print(lastPosChar);
 				else
 					System.out.print(' ');
 				if (x < 7)

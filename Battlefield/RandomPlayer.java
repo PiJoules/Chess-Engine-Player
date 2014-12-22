@@ -2,9 +2,7 @@ import chess.*;
 
 import java.util.*;
 
-/**
- * A random tic tac toe player
- */
+// A player that makes random moves
 public class RandomPlayer extends Player {
 
 	private static Random random = new Random();

@@ -16,7 +16,14 @@ test() {
 	makeJar
 	mkdir -p Battlefield/build/classes
 	javac -d Battlefield/build/classes -cp build/jars/chess.jar Battlefield/*.java
-	java -cp Battlefield/build/classes:build/jars/chess.jar Board
+	java -cp Battlefield/build/classes:build/jars/chess.jar Board RandomPlayer RandomPlayer
+	rm -rf Battlefield/build
+}
+
+battle() {
+	mkdir -p Battlefield/build/classes
+	javac -d Battlefield/build/classes -cp build/jars/chess.jar Battlefield/*.java
+	java -cp Battlefield/build/classes:build/jars/chess.jar Board $1 RandomPlayer
 	rm -rf Battlefield/build
 }
 
@@ -34,4 +41,8 @@ fi
 
 if [ "$1" == "test" ]; then
 	test
+fi
+
+if [ "$1" == "battle" ]; then
+	battle $2
 fi
