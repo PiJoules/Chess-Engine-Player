@@ -12,18 +12,16 @@ makeJar() {
 	mv chess.jar build/jars
 }
 
-test() {
-	makeJar
-	mkdir -p Battlefield/build/classes
-	javac -d Battlefield/build/classes -cp build/jars/chess.jar Battlefield/*.java
-	java -cp Battlefield/build/classes:build/jars/chess.jar Board RandomPlayer RandomPlayer
-	rm -rf Battlefield/build
-}
-
 battle() {
 	mkdir -p Battlefield/build/classes
 	javac -d Battlefield/build/classes -cp build/jars/chess.jar Battlefield/*.java
-	java -cp Battlefield/build/classes:build/jars/chess.jar Board $1 RandomPlayer
+	java -cp Battlefield/build/classes:build/jars/chess.jar Board $1 RandomPlayer $2
+	rm -rf Battlefield/build
+}
+
+test() {
+	makeJar
+	battle RandomPlayer 1
 	rm -rf Battlefield/build
 }
 
@@ -44,5 +42,11 @@ if [ "$1" == "test" ]; then
 fi
 
 if [ "$1" == "battle" ]; then
-	battle $2
+	battle $2 1
+fi
+
+# first arg is the number of games to do
+# second is first player name
+if [ "$1" == "battleN" ]; then
+	battle $3 $2
 fi

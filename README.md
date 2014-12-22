@@ -1,5 +1,4 @@
 # Chess Engine and Players
-## Summary
 A mediocre Java chess engine that can make players compete against each other.
 ## Setup
 1) After cloning the repository and changing into the directory, create the jar files with
@@ -12,9 +11,14 @@ $ just test
 ```
 3) Add a `player.java` file into the `Battlefield` directory to be able to play it against a `RandomPlayer`. Have it play against a RandomPlayer with
 ```sh
-$ just battle [PlayerName]
+$ just battle PlayerName
 # For example, to have the FirstOrderPlayer go against a RandomPlayer
 # $ just battle FirstOrderPlayer
+```
+To have the engine play `N` games, use
+```sh
+$ just battleN N PlayerName
+# Where N is an integer
 ```
 4) Remove all the class and jar files if necessary
 ```sh
