@@ -13,7 +13,7 @@ public class BoardState {
 	private int moveCount;
 	private int whiteMovesLeft = 50;
 	private int blackMovesLeft = 50;
-	private Move lastMove; // record the last move made for display
+	private Move lastMove = null; // record the last move made for display
 	private boolean verbose = false, showingPositions = false;
 	private Color winner = null; // will stay null in event of a tie
 
@@ -484,6 +484,8 @@ public class BoardState {
 	public void display(){
 		// Mark the previous square of the moving
 		// piece with an x
+		int lastX, lastY;
+		char lastPosChar;
 		int lastX = lastMove.getInitSquare().getX();
 		int lastY = lastMove.getInitSquare().getY();
 		char lastPosChar = 'X'; // for last move of white

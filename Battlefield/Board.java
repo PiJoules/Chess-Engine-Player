@@ -36,10 +36,10 @@ public class Board {
             while(true){
                 System.out.println("Turn: " + (board.getMoveCount()+1));
 
+                board.display();
                 playerMove= p1.getMove(board);
                 System.out.println(playerMove.toString() + "\n");
                 board = board.makeMove(playerMove);
-                board.display();
                 if (isGameOver(board)){
                     break;
                 }
@@ -47,10 +47,10 @@ public class Board {
                 System.out.println("______________\n");
                 System.out.println("Turn: " + (board.getMoveCount()+1));
 
+                board.display();
                 playerMove = p2.getMove(board);
                 System.out.println(playerMove.toString() + "\n");
                 board = board.makeMove(playerMove);
-                board.display();
                 if (isGameOver(board)){
                     break;
                 }

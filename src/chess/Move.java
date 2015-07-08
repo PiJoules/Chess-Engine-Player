@@ -41,4 +41,10 @@ public class Move {
 		return initSquare.toString() + " -> " + destSquare.toString();
 	}
 
+	@Override
+	public boolean equals(Object moveObject){
+		Move move = (Move) moveObject;
+		return initSquare.equals(move.getInitSquare()) && destSquare.equals(move.getDestSquare());
+	}
+
 }
